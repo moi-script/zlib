@@ -1,0 +1,26 @@
+
+
+-- Zlib is api built on top of stream Transform
+ 
+ WHAT IS ZLIB -> it is a way to compress and decompress a streams
+
+gzip(); --> .gz
+deflate() -> .deflate
+brotli() -> .br
+
+
+-- The advantages of using zip 
+    * reduce file size
+    * compress http reponse before sending them
+    * decompress data stream reading compressed files
+    * handle compression in archives or network protocols
+
+
+-- Zlib compress
+    createGzip()
+-- Zlib decompress
+    createGunzip()
+
+
+-- Node js documentation 
+
