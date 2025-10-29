@@ -24,3 +24,142 @@ brotli() -> .br
 
 -- Node js documentation 
 
+|| ThreadPool usage and performance consideration 
+
+import zlib from 'node:zlib';
+import { Buffer } from 'node:buffer';
+
+const payload = Buffer.from('This is some data');
+
+// WARNING: DO NOT DO THIS!
+for (let i = 0; i < 30000; ++i) {
+  zlib.deflate(payload, (err, buffer) => {}); 
+} // this will create a multiple deflate instancess concurenlty that will make some memory fragmentation 
+
+
+
+
+
+|| Compressing HTTP request and response 
+
+-- Having HTTP associated with zlib is more complex, without knowing the fundamentals of streams
+-- 'Accept-Encoding': 'br,gzip,deflate' 
+
+-- http support compress request it was included in Content-Encoding
+// using gzip is memory heavy -> needs some memory usage tuning
+
+
+
+
+
+1. 
+
+-- DEFLATE
+
+        Algorithm -> Combines LZ77 (dictionary compression) and Huffman coding.
+        file extension -> .deflate, .zlib
+        Used in -> ZIP files, PNG images, older HTTP compression 
+
+By chatgpt source :: 
+ --Pros:
+
+    Fast and simple
+    Widely supported
+    Produces small compressed data compared to older algorithms
+
+ --Cons:
+
+    No internal header or metadata (like file name or checksum)
+    Slightly lower compression ratio than Gzip or Brotli
+    Less efficient for text-heavy data
+
+
+Importing deflate 
+
+    | import { createDeflate, createInflate } from 'zlib'; |
+
+Classes 
+
+    zlib.Deflate -> class that compress using deflate
+    zlib.DeflateRaw -> class that compress data using deflate without using zlib header 
+
+
+Methods and Instance propeties 
+
+    flush([kind], callback) -> flush pending data; for deflate algorithm this is applicable
+    params(level, strategy, callback) -> dynamically update the compression level and strategy (deflate only) after instantiation
+    reset() -> reset the compressor or decompressor to factory defaults (deflate & inflate)
+
+    bytesWritten -> an instance property specifying the number of bytes written to the engine (before processing) in derived classes
+
+
+Static module 
+
+    zlib.deflate(buf[, options], callback) -> compress a Buffer or string using deflate
+    zlib.deflateSync(buf[, options]) ->  synchronous version
+    zlib.deflateRaw(buf[, options], callback) -> compress using deflateraw
+    zlib.deflateRawSync(buf[, options]) -> synchronous version of the raw variant.
+
+
+
+Constants
+    Flush Constants
+        zlib.constants.Z_NO_FLUSH
+        Z_SYNC_FLUSH, 
+        Z_FULL_FLUSH,
+        Z_FINISH
+
+    Return Status Compression and Decompresison
+        zlib.constants.Z_OK
+        Z_STREAM_END
+        Z_NEED_DICT
+        Z_ERRNO
+        Z_STREAM_ERROR
+        Z_DATA_ERROR
+        Z_MEM_ERROR
+        Z_BUF_ERROR
+        Z_VERSION_ERROR
+
+    Compression Memory Level
+    level -> compression level
+    windowBits -> size of history buffer relevant to deflate
+    memLevel -> memory usage control for compressor
+    strategy -> compression strategy Huffman only 
+    dictionary -> deflate/inflate for preset dictionary
+
+
+| Raw is a version where it was process without using zlib header such as
+
+        * Compression Methods
+        * Window size
+        * Flags , for preset  dictionary
+        * Checksum - for data integrity 
+
+
+ ---Deflate
+
+|  Helper Function 
+
+    zlib.deflate(buffer, callback) 
+    zlib.deflateSync(buffer)
+    zlib.createDeflate()
+
+| Raw Version 
+
+    zlib.deflateRaw()
+    zlib.createDeflateRaw()
+
+
+-- Inflate 
+
+| Helper Function
+
+    zlib.inflate(buffer, callback)
+    zlib.inflateSync(buffer)
+    zlib.createInflate()
+
+
+| Raw Version 
+
+    zlib.inflateRaw() 
+    zlib.createInflateRaw()
