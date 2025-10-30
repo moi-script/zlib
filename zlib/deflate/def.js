@@ -1,9 +1,38 @@
 import zlib from 'zlib';
 
-const compressTrey = zlib.deflate('hello world', (err, result ) => console.log(result));
+
+// needs to convert the param into promise 
+function promisify(...args) {
+    return function (param) {
+        return new Promise((resolve, reject) => {
+            let [ fn ] = args;
+            // resolve(fn(param));
+            fn(param, (err, result) =>{
+                if(err) reject(err)
+                resolve(result);
+            })
+        })
+    }
+}
+
+const promiseDeflate = promisify(zlib.deflate);
+const resolve = await promiseDeflate('Hello world')
+// console.log(resolve);
+
+
+function fn1(...args){
+    console.log('Test call ::', args); // [ 1, 2, 3, 4 ]
+}
+// fn1(1, 2, 3, 4);
+
+
+
+
+
+// const compressTrey = zlib.deflate('hello world', (err, result) => console.log(result));
 const compress = zlib.deflateSync(Buffer.from('Hello world'));
 
-console.log('Result :: ', compress); // <Buffer 78 9c f3 48 cd c9 c9 57 28 cf 2f ca 49 01 00 18 ab 04 3d>s
+// console.log('Result :: ', compress); // <Buffer 78 9c f3 48 cd c9 c9 57 28 cf 2f ca 49 01 00 18 ab 04 3d>s
 
 //  <Buffer 78 9c this is the header
 
