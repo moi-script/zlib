@@ -1,0 +1,8 @@
+-- This introduce the crypto module
+
+// crypt cosist of different applications
+-- Hashing 
+-- Encryption and Decryption
+-- Digital Signatures & Public key Encryption
+-- Tokens, Authenticate, Randomness
+-- Secure file data handling

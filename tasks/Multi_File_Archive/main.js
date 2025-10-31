@@ -1,6 +1,7 @@
 
 import fs from 'fs';
 import zlib from 'zlib';
+import { appendFile } from 'fs/promises';
 import console from 'console';
 
 // {
@@ -22,17 +23,19 @@ export function fileListToJsonZip(arr) {
 
 } 
 
-console.log(fileListToJsonZip(arr))
+// console.log(fileListToJsonZip(arr))
 
-for(const num of arr.entries()){ 
-    console.log('NUms :: ', num);
-}
+// for(const num of arr.entries()){ 
+//     console.log('NUms :: ', num);
+// }
 // NUms ::  [ 0, 'one' ]
 // NUms ::  [ 1, 'two' ]
 
 
 // to list all files via dir and poppulate it with json zip
 
-console.table([{ a: 1, b: 'Y' }, { a: 1, b: 2 }]);
+// console.table([{ a: 1, b: 'Y' }, { a: 1, b: 2 }]);
 
 
+
+// let a  = appendFile('hello.txt', 'new1\n');

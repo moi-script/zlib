@@ -163,3 +163,6 @@ Constants
 
     zlib.inflateRaw() 
     zlib.createInflateRaw()
+
+ -- Flushing  .flush();
+        Separatedly return a output as much as possible 
